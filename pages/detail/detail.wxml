@@ -1,0 +1,262 @@
+<view class='topTabSwiper'>
+	<view class='tab  {{currentTab == 0 ? "tabBorer" : ""}}' data-current="0" bindtap='checkCurrent'>定时</view>
+	<view class='tab  {{currentTab == 1 ? "tabBorer" : ""}}' data-current="1" bindtap='checkCurrent'>计时</view>
+</view>
+
+<swiper current="{{currentTab}}" style="height:{{H}}px;" class='swiper' duration="300" bindchange="setCurrenTab">
+	<swiper-item catchtouchmove='catchTouchMove'>
+		<scroll-view class="scroll-container" scroll-y style="height:{{setTimeH}}px">
+			<view class="item-line"></view>
+			<view class="item">
+				<text class="item-left">蓝牙名称</text>
+				<text class="item-right text-right">{{device&&device.name?device.name:''}}</text>
+			</view>
+			<view class="item-line"></view>
+			<view class="item" bindtap="setRemarkName">
+				<text class="item-left">备注名称</text>
+				<view class="item-right">
+					<text class="text-right">{{remarkName}}</text>
+					<image class="image-arrow" src="../../images/ic_arrow.png" mode="widthFix"></image>
+				</view>
+			</view>
+			<view class="item-line"></view>
+			<view class="item" bindtap="setModifyPwd">
+				<text class="item-left">修改密码</text>
+				<view class="item-right">
+					<image class="image-arrow" src="../../images/ic_arrow.png" mode="widthFix"></image>
+				</view>
+			</view>
+			<view class="item-line" style="margin-top:1rpx;"></view>
+			<view class="item">
+				<text class="item-left">目前状态</text>
+				<text class="item-middle">{{curTime}} {{curWeek}}</text>
+				<text class="item-right text-green">{{curStatus}}</text>
+			</view>
+			<view class="item-line"></view>
+			<view class="btn-linear" style="margin-top:20rpx;">
+				<view class="btn-left" bindtap="open">
+					<image class="btn-image" src="../../images/ic_power_on@3x.png" mode="widthFix"></image>
+				</view>
+				<view class="btn-right" bindtap="close">
+					<image class="btn-image" src="../../images/ic_power_off@3x.png" mode="widthFix"></image>
+				</view>
+			</view>
+			<view class="btn-linear">
+				<view class="btn-left" bindtap="recover">
+					<image class="btn-image" src="../../images/ic_recover_time@3x.png" mode="widthFix"></image>
+				</view>
+				<view class="btn-right" bindtap="jiaoshi">
+					<image class="btn-image" src="../../images/ic_proof_time@3x.png" mode="widthFix"></image>
+				</view>
+			</view>
+			<view class="item-line"></view>
+			<view class="title" style="margin-top:1rpx;height:80rpx;">定时设置</view>
+			<view class="item-line"></view>
+			<block wx:for="{{timeConf}}" wx:key="*this">
+				<view class="item" style="margin-top:1rpx;" bindtap="onTimeEdit" data-index="{{index}}" bindlongpress="onTimeDel">
+					<text class="item-left">{{'定时'+(index+1)}}</text>
+					<view class="item-right">
+
+						<view class="item-time">
+							<text class="text-top">开：{{item.startTime.weekCN}} {{tem.startTime.hour<10?'0'+item.startTime.hour:item.startTime.hour}}:{{item.startTime.min<10?'0'+item.startTime.min:item.startTime.min}}</text>
+							<text class="text-bottom">关：{{item.endTime.weekCN}} {{item.endTime.hour<10?'0'+item.endTime.hour:item.endTime.hour}}:{{item.endTime.min<10?'0'+item.endTime.min:item.endTime.min}}</text>
+						</view>
+						<image class="image-arrow" src="../../images/ic_arrow.png" mode="widthFix"></image>
+					</view>
+				</view>
+				<view class="item-line"></view>
+			</block>
+
+
+			<view hidden="{{timeConf&&timeConf.length>=30}}" class="item" bindtap="onTimeAdd">
+				<image class="item-left-image" src="../../images/naozhong@3x.png" mode="widthFix"></image>
+				<text class="text-green" style="margin-left:40rpx;">添加定时设置</text>
+			</view>
+		</scroll-view>
+	</swiper-item>
+	<!--计时-->
+	<swiper-item catchtouchmove='catchTouchMove'>
+		<scroll-view class="scroll-container" scroll-y style="height:{{countTimeH}}px">
+			<view class="item-line"></view>
+			<view class="item">
+				<text class="item-left">蓝牙名称</text>
+				<text class="item-right text-right">{{device&&device.name?device.name:''}}</text>
+			</view>
+			<view class="item-line"></view>
+			<view class="item" bindtap="setRemarkName">
+				<text class="item-left">备注名称</text>
+				<view class="item-right">
+					<text class="text-right">{{remarkName}}</text>
+					<image class="image-arrow" src="../../images/ic_arrow.png" mode="widthFix"></image>
+				</view>
+			</view>
+			<view class="item-line"></view>
+			<view class="item" bindtap="setModifyPwd">
+				<text class="item-left">修改密码</text>
+				<view class="item-right">
+					<image class="image-arrow" src="../../images/ic_arrow.png" mode="widthFix"></image>
+				</view>
+			</view>
+			<view class="item-line"></view>
+
+			<view class="shizhong">
+				<image class="image" src="../../images/yuanquan@3x.png" mode="widthFix"></image>
+				<view class="daojishi">{{daojishi}}</view>
+			</view>
+
+			<view style="display:flex;align-items: center;justify-content: center;background: white;padding-bottom:10rpx;">
+				<view wx:if="{{daojishiStart.daojishiOpenClose == 1 && daojishiEnd.daojishiOpenClose == 1}}">循环计时</view>
+				<view wx:elif="{{daojishiStart.daojishiOpenClose == '1' && daojishiEnd.daojishiOpenClose == 0}}">倒计时开</view>
+				<view wx:elif="{{daojishiStart.daojishiOpenClose == '0' && daojishiEnd.daojishiOpenClose == 1}}">倒计时关</view>
+			</view>
+
+			<view class="item-line"></view>
+
+
+			<view class="item" bindtap="">
+				<text class="item-left">开始时长</text>
+				<view class="item-middle" style="line-height:100rpx;display: flex;align-items: center;">
+					<button class="mini-btn" bindtap="openClose" type="default" data-ctype="start" size="mini">开启/关闭</button>
+				</view>
+				<view class="item-right">
+					<picker mode="multiSelector" bindchange="bindDaojishiChange" value="{{daojishiStart.daojishiIndex}}" range="{{daojishiTime}}" data-ctype="start">
+						<text class="text-right">{{daojishiStart.daojishiTime}}</text>
+						<image wx:if="{{daojishiflag == 1}}" class="image-arrow" src="../../images/lvyuan@3x.png" mode="widthFix"></image>
+						<image wx:elif="{{daojishiflag == 0}}" class="image-arrow" src="../../images/hongyuan@3x.png" mode="widthFix"></image>
+						<image wx:else class="image-arrow" src="../../images/hongyuan@3x.png" mode="widthFix"></image>
+					</picker>
+				</view>
+			</view>
+
+
+			<view class="item-line"></view>
+
+
+			<view class="item" bindtap="">
+				<text class="item-left">关闭时长</text>
+				<view class="item-middle" style="line-height:100rpx;display: flex;align-items: center;">
+					<button class="mini-btn" bindtap="openClose" type="default" size="mini"
+					data-ctype="end">开启/关闭</button>
+				</view>
+
+				<view class="item-right">
+					<picker mode="multiSelector" bindchange="bindDaojishiChange" value="{{daojishiEnd.daojishiIndex}}" range="{{daojishiTime}}" data-ctype="end">
+						<text class="text-right">{{daojishiEnd.daojishiTime}}</text>
+						<image wx:if="{{daojishiflag == 0}}" class="image-arrow" src="../../images/lvyuan@3x.png" mode="widthFix"></image>
+						<image wx:elif="{{daojishiflag == 1}}" class="image-arrow" src="../../images/hongyuan@3x.png" mode="widthFix"></image>
+						<image wx:else class="image-arrow" src="../../images/hongyuan@3x.png" mode="widthFix"></image>
+					</picker>
+				</view>
+
+			</view>
+
+			<view class="item-line"></view>
+
+			<view class="item" style="padding-top:20rpx;">
+				<view class="item-left" bindtap="reset">
+					<image class="imgbtn" src="../../images/reset@3x.png" mode="widthFix"></image>
+				</view>
+				<view class="item-right" bindtap="startTop">
+					<image class="imgbtn" src="../../images/startstop@3x.png" mode="widthFix"></image>
+				</view>
+			</view>
+
+
+			<view class="item-line"></view>
+		</scroll-view>
+	</swiper-item>
+</swiper>
+
+
+
+<view class="bottom-container" hidden="{{currentTab == 0 ? false : true}}">
+	<view class="item-line" style="position:absolute;left:0;top:0;"></view>
+	<view class="bottom-item" bindtap="onCommit">
+		<image class="bottom-item-image" src="../../images/baocun_mian@3x.png" mode="widthFix"></image>
+		<text class="text-green" style="margin-left:10rpx;">保存发送</text>
+	</view>
+	<view class="bottom-item" bindtap="onBackup">
+		<image class="bottom-item-image" src="../../images/daoru@3x.png" mode="widthFix"></image>
+		<text class="text-blue" style="margin-left:10rpx;">备份/导入</text>
+	</view>
+</view>
+
+
+
+<view class="modal-dialog" hidden="{{!modalKeyShow}}">
+	<view class="modal-box">
+		<text class="modal-box-title">提示</text>
+		<text class="modal-box-desc">密码为4位数字</text>
+		<input class="modal-box-input" bindinput="onInputChange" password="true" type="number" maxlength="4" placeholder="请输入设备密码" cursor-spacing="100" value="{{passwordInputVal}}"></input>
+		<view style="width:100%;height:1rpx;background:#eee"></view>
+		<view class="modal-box-bottom" style="height:100rpx;">
+			<view wx:if="{{device.RSSI > -60}}" bindtap="onModalKeyClick" data-ctype="modify" class="modal-box-button" hover-class="modal-box-button-hover" style="flex-grow:1;color:#000;">修改密码</view>
+			<view wx:else bindtap="onModalKeyClick" data-ctype="cancel" class="modal-box-button" hover-class="modal-box-button-hover" style="flex-grow:1;color:#000;">取消</view>
+			<view style="width:1rpx;height:100%;background:#eee"></view>
+			<view bindtap="onModalKeyClick" data-ctype="confirm" class="modal-box-button" hover-class="modal-box-button-hover" style="flex-grow:1;color:green;">确定</view>
+		</view>
+	</view>
+</view>
+
+<view class="modal-dialog" hidden="{{!showModal}}">
+	<view class="modal-box">
+		<text class="modal-box-title">提示</text>
+		<text class="modal-box-desc">设备的备注名称</text>
+		<input class="modal-box-input" bindinput="onInputChange" type="text" maxlength="10" value="{{remarkName}}" placeholder="请输入设备名称" cursor-spacing="100"></input>
+		<view style="width:100%;height:1rpx;background:#eee"></view>
+		<view class="modal-box-bottom" style="height:100rpx;">
+			<view bindtap="onModalClick" data-ctype="cancel" class="modal-box-button" hover-class="modal-box-button-hover" style="flex-grow:1;color:#000;">取消</view>
+			<view style="width:1rpx;height:100%;background:#eee"></view>
+			<view bindtap="onModalClick" data-ctype="confirm" class="modal-box-button" hover-class="modal-box-button-hover" style="flex-grow:1;color:green;">确定</view>
+		</view>
+	</view>
+</view>
+
+
+<view class="modal-dialog" hidden="{{!showPwdDialog}}">
+	<view class="modal-box">
+		<text class="modal-box-title">提示</text>
+		<text class="modal-box-desc">修改密码</text>
+		<input class="modal-box-input" bindinput="onPwdInputChange" type="text" maxlength="4" value="{{newPwd}}" placeholder="请输入新的密码" cursor-spacing="100"></input>
+		<view style="width:100%;height:1rpx;background:#eee"></view>
+		<view class="modal-box-bottom" style="height:100rpx;">
+			<view bindtap="onPwdModalClick" data-ctype="cancel" class="modal-box-button" hover-class="modal-box-button-hover" style="flex-grow:1;color:#000;">取消</view>
+			<view style="width:1rpx;height:100%;background:#eee"></view>
+			<view bindtap="onPwdModalClick" data-ctype="confirm" class="modal-box-button" hover-class="modal-box-button-hover" style="flex-grow:1;color:green;">确定</view>
+		</view>
+	</view>
+</view>
+
+
+<view class="modal-dialog" hidden="{{!modalBackupShow}}">
+	<view class="modal-box">
+		<view class="backup-container">
+			<view wx:for="{{modalBackupData}}" wx:key="*this" class="backup-item" hover-class="backup-item-hover" data-index="{{index}}" style="background-color: {{modalBackupIndex===index?'#eee':'#fff'}}" bindtap="onModalBankupItemClick" bindlongpress="onModalBankupDelItemClick">
+				<image class="backup-item-img" src="../../images/daoru@3x.png" mode="widthFix"></image>
+				<text class="backup-item-name">{{item.name}}</text>
+			</view>
+		</view>
+		<view style="width:100%;height:1rpx;background:#eee"></view>
+		<view class="modal-box-bottom" style="height:100rpx;">
+			<view bindtap="onModalBackupClick" data-ctype="backup" class="modal-box-button" hover-class="modal-box-button-hover" style="flex-grow:1;color:#000;">备份</view>
+			<view style="width:1rpx;height:100%;background:#eee"></view>
+			<view bindtap="onModalBackupClick" data-ctype="import" class="modal-box-button" hover-class="modal-box-button-hover" style="flex-grow:1;color:green;">导入</view>
+		</view>
+	</view>
+	<image class="modal-dialog-close" src="../../images/ic_close.png" mode="widthFix" bindtap="onModalBackupClose"></image>
+</view>
+
+
+<view class="modal-dialog" hidden="{{!modalBackupNameShow}}">
+	<view class="modal-box">
+		<text class="modal-box-title">提示</text>
+		<text class="modal-box-desc">备份的名称</text>
+		<input class="modal-box-input" bindinput="onInputChange" placeholder="请输入备份名称" cursor-spacing="100"></input>
+		<view style="width:100%;height:1rpx;background:#eee"></view>
+		<view class="modal-box-bottom" style="height:100rpx;">
+			<view bindtap="onModalBackupNameClick" data-ctype="cancel" class="modal-box-button" hover-class="modal-box-button-hover" style="flex-grow:1;color:#000;">取消</view>
+			<view style="width:1rpx;height:100%;background:#eee"></view>
+			<view bindtap="onModalBackupNameClick" data-ctype="confirm" class="modal-box-button" hover-class="modal-box-button-hover" style="flex-grow:1;color:green;">确定</view>
+		</view>
+	</view>
+</view>

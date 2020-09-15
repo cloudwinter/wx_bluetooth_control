@@ -1,0 +1,35 @@
+{
+  "tabBar": {
+    "borderStyle": "black",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "images/shebei.png",
+        "selectedIconPath": "images/shebei.png",
+        "text": "搜索设备"
+      },
+      {
+        "pagePath": "pages/instructions/instructions",
+        "iconPath": "images/shuoming.png",
+        "selectedIconPath": "images/shuoming.png",
+        "text": "使用说明"
+      }
+    ]
+  },
+  "pages": [
+    "pages/index/index",
+    "pages/instructions/instructions",
+    "pages/detail/detail",
+    "pages/time/time"
+  ],
+  "window": {
+    "backgroundTextStyle": "dark",
+    "backgroundColor": "#f5f5f5",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "蓝牙定时器",
+    "navigationBarTextStyle": "black"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

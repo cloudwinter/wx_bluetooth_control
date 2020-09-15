@@ -1,0 +1,22 @@
+<!--index.wxml-->
+<image class="banner-image" src="../../images/banner@3x.png" mode="widthFix"></image>
+<view class="header" hidden="true">
+	<switch bindchange="onSwitchChange" checked="{{bleOpened}}">{{bleOpened?'停止扫描':'开始扫描'}}</switch>
+  <image wx:if="{{bleOpened}}" bindtap="startAnimation" class="img-scan" src="../../images/ic_scan.png" animation="{{animationData}}"></image>
+</view>
+<text class="list-title">设备列表</text>
+<block wx:for="{{devices}}" wx:key="*this" wx:for-item="device">
+	<!-- 分割线 -->
+	<view wx:if="{{index > 0}}" class="divider-line"></view>
+	<view class="list-item" hover-class="list-item-hover" bindtap="createBLEConnection" data-device="{{device}}" data-device-id="{{device.deviceId}}" data-name="{{device.name || device.localName}}">
+		<view class="item-row">
+      <text class="item-left">{{device.name}}</text>
+      <text class="item-right">{{device.RSSI}}</text>
+    </view>
+    <view class="item-row" style="margin-top:4rpx">
+      <text class="item-left item-tip">{{device.deviceId}}{{device.remarkName?'('+device.remarkName+')':''}}</text>
+      <text class="item-right item-tip">{{connected&&connected.deviceId===device.deviceId?'已连接':''}}</text>
+    </view>
+    <image class="item-arrow" src="../../images/ic_arrow.png" mode="widthFix"></image>
+	</view>
+</block>

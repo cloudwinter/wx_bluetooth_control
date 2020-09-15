@@ -1,0 +1,59 @@
+/* pages/time/time.wxss */
+
+.item {
+  width: 100%;
+  height: 100rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: relative;
+  background-color: #fff;
+}
+
+.item-hover {
+  background-color: #eee;
+}
+
+.item-arrow {
+  margin-right: 32rpx;
+  height: 36rpx;
+  width: 21rpx;
+}
+
+.item-left {
+  margin-left: 32rpx;
+}
+
+.item-right {
+  flex: 1;
+  margin-right: 32rpx;
+  text-align: right;
+}
+
+.divider-line {
+  color: #eee;
+  width: 100%;
+  height: 1rpx;
+}
+
+
+.checkbox {
+  transform: scale(0.7, 0.7);
+  margin-left: 32rpx;
+}
+
+
+
+.checkbox .wx-checkbox-input.wx-checkbox-input-checked {
+  color: #fff;
+  background: #6669e3;
+  border-color: #6669e3;
+}
+
+
+.applicant_name {
+  font-size: 34rpx;
+  margin-left: 20rpx;
+  
+}
+
